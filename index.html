@@ -3,105 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agente de Atención al Cliente</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 50px;
-            text-align: center;
-        }
-        input, textarea {
-            width: 80%;
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .response {
-            margin-top: 30px;
-        }
-        iframe {
-            margin-top: 20px;
-            border: 1px solid #ccc;
-        }
-    </style>
+    <title>AgenteIA</title>
 </head>
 <body>
-    <h1>Agente de Atención al Cliente</h1>
-    <p>Habla con nuestro agente de IA. Haz clic en el botón "Start a call" para comenzar.</p>
-
-    <!-- Widget de ElevenLabs -->
-    <elevenlabs-convai agent-id="h6kQCKVOSXZr406mosdq"></elevenlabs-convai>
-    <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
-
-    <!-- Formulario para solicitar una cita -->
-    <h2>Solicitar una Cita</h2>
-    <input type="text" id="summary" placeholder="Título de la cita (ej. Reunión)">
-    <input type="datetime-local" id="start_time">
-    <input type="datetime-local" id="end_time">
-    <button id="scheduleButton">Solicitar Cita</button>
-
-    <!-- Respuesta del agente -->
-    <div class="response">
-        <h3>Respuesta:</h3>
-        <p id="responseMessage"></p>
-    </div>
-
-    <!-- Calendario Público -->
-    <h2>Calendario Público</h2>
-    <iframe src="https://calendar.google.com/calendar/embed?src=3acc61c8b27f26e8276ac2fae281794cbb07aef6de25b5d02d9b7408fbd1fc8a%40group.calendar.google.com&ctz=Europe%2FMadrid" 
-            style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-
+    <h1>Bienvenido a AgenteIA</h1>
+    <p>Habla con nuestro agente virtual.</p>
+    
+    <!-- Widget del Agente de Voz -->
+    <script src="https://cdn.elevenlabs.io/agent-widget.js"></script>
+    <div id="agent-widget"></div>
     <script>
-        document.getElementById('scheduleButton').addEventListener('click', function() {
-            const summary = document.getElementById('summary').value;
-            const start_time = document.getElementById('start_time').value;
-            const end_time = document.getElementById('end_time').value;
-
-            if (!summary || !start_time || !end_time) {
-                alert("Por favor, completa todos los campos.");
-                return;
+        ElevenLabsAgent.init({
+            apiKey: 'TU_API_KEY_DE_ELEVENLABS',
+            onMessageReceived: function(data) {
+                // Procesar los datos recibidos del agente
+                fetch('/schedule', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
             }
-
-            // Mostrar mensaje de carga
-            document.getElementById('responseMessage').innerText = "Agendando cita...";
-
-            // Enviar solicitud al servidor Flask
-            fetch('/schedule', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    summary: summary,
-                    start_time: start_time + ":00",
-                    end_time: end_time + ":00"
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    document.getElementById('responseMessage').innerHTML = 
-                        `Cita agendada exitosamente. <a href="${data.event_link}" target="_blank">Ver en Google Calendar</a>`;
-                } else {
-                    document.getElementById('responseMessage').innerText = 'Error: ' + data.message;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('responseMessage').innerText = 'Error al comunicarse con el servidor.';
-            });
         });
     </script>
 </body>
