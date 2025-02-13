@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgenteIA</title>
+    <title>Agente de Atención al Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            text-align: center;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido a AgenteIA</h1>
-    <p>Habla con nuestro agente virtual.</p>
-    
-    <!-- Widget del Agente de Voz -->
-    <script src="https://cdn.elevenlabs.io/agent-widget.js"></script>
-    <div id="agent-widget"></div>
-    <script>
-        ElevenLabsAgent.init({
-            apiKey: 'TU_API_KEY_DE_ELEVENLABS',
-            onMessageReceived: function(data) {
-                // Procesar los datos recibidos del agente
-                fetch('/schedule', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                });
-            }
-        });
-    </script>
+    <h1>Agente de Atención al Cliente</h1>
+    <p>Habla con nuestro agente de IA. Haz clic en el botón del "Start a call" para comenzar.</p>
+
+    <!-- Widget de ElevenLabs -->
+    <elevenlabs-convai agent-id="h6kQCKVOSXZr406mosdq"></elevenlabs-convai>
+    <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 </body>
 </html>

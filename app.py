@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-from google_calendar import create_event
 from dotenv import load_dotenv
 import os
 
@@ -39,6 +38,11 @@ def schedule():
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+def create_event(summary, start_time, end_time):
+    # Aquí deberías implementar la lógica para crear un evento en Google Calendar
+    # Por ahora, devolveremos un enlace de evento ficticio
+    return "https://calendar.google.com/event?eid=ficticio"
 
 if __name__ == '__main__':
     app.run(debug=True)
